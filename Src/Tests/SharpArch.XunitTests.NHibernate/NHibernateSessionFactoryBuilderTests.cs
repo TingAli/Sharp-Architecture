@@ -85,6 +85,16 @@
         }
 
         [Fact]
+        public void Should_Reuse_BuiltConfigurationInstance()
+        {
+            var builder = new NHibernateSessionFactoryBuilder()
+                .UseConfigFile(GetConfigFullName());
+
+            var config = builder.BuildConfiguration();
+            builder.BuildConfiguration().Should().BeEquivalentTo(config);
+        }
+
+        [Fact]
         public void CanInitializeWithConfigFileAndConfigurationFileCache()
         {
             Configuration configuration = new NHibernateSessionFactoryBuilder()
