@@ -45,7 +45,7 @@
             [Fact]
             public void Should_Return_DefaultDatabase_When_Attribute_Is_Not_Applied()
             {
-                _provider.GetFromType(typeof(UndecoratedRepo)).Should().Be(UseDatabaseAttribute.Default);
+                _provider.GetFromType(typeof(UndecoratedRepo)).Should().Be(DatabaseIdentifier.Default);
             }
 
             [Fact]
@@ -63,19 +63,19 @@
             [Fact]
             public void Should_Return_DefaultDatabase_For_Decorated_Instance()
             {
-                _provider.GetFromInstance(new BaseRepo()).Should().Be(UseDatabaseAttribute.Default);
+                _provider.GetFromInstance(new BaseRepo()).Should().Be(DatabaseIdentifier.Default);
             }
 
             [Fact]
             public void Should_Return_DefaultDatabase_For_Decorated_Type()
             {
-                _provider.GetFromType(typeof(BaseRepo)).Should().Be(UseDatabaseAttribute.Default);
+                _provider.GetFromType(typeof(BaseRepo)).Should().Be(DatabaseIdentifier.Default);
             }
 
             [Fact]
             public void Should_Return_DefaultDatabase_For_Undecorated_Type()
             {
-                _provider.GetFromType(typeof(UndecoratedRepo)).Should().Be(UseDatabaseAttribute.Default);
+                _provider.GetFromType(typeof(UndecoratedRepo)).Should().Be(DatabaseIdentifier.Default);
             }
         }
     }

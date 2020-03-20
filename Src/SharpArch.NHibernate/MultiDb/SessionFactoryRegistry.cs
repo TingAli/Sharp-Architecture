@@ -1,14 +1,11 @@
-﻿namespace Tests.SharpArch.NHibernate.MultiDb
+﻿using System;
+using System.Collections.Concurrent;
+using System.Threading;
+using JetBrains.Annotations;
+using NHibernate;
+
+namespace SharpArch.NHibernate.MultiDb
 {
-    using System;
-    using System.Collections.Concurrent;
-    using System.Threading;
-    using global::NHibernate;
-    using global::NHibernate.Cfg;
-    using global::SharpArch.NHibernate;
-    using JetBrains.Annotations;
-
-
     /// <summary>
     ///     Contains registered NHibernate Factories.
     ///     <para>
@@ -62,7 +59,7 @@
         public ISessionFactory GetSessionFactory([NotNull] string databaseIdentifier)
             => GetLazyFactory(databaseIdentifier).SessionFactory.Value;
 
-        public Configuration GetConfiguration(string databaseIdentifier)
+        public global::NHibernate.Cfg.Configuration GetConfiguration(string databaseIdentifier)
             => GetLazyFactory(databaseIdentifier).Configuration.Value;
 
         public bool Contains(string databaseIdentifier)
@@ -101,13 +98,13 @@
 
         class Container
         {
-            public Lazy<Configuration> Configuration { get; }
+            public Lazy<global::NHibernate.Cfg.Configuration> Configuration { get; }
 
             public Lazy<ISessionFactory> SessionFactory { get; }
 
             public Container(INHibernateSessionFactoryBuilder factoryBuilder)
             {
-                Configuration = new Lazy<Configuration>(() => factoryBuilder.BuildConfiguration(), LazyThreadSafetyMode.ExecutionAndPublication);
+                Configuration = new Lazy<global::NHibernate.Cfg.Configuration>(() => factoryBuilder.BuildConfiguration(), LazyThreadSafetyMode.ExecutionAndPublication);
                 SessionFactory = new Lazy<ISessionFactory>(
                     () =>
                     {

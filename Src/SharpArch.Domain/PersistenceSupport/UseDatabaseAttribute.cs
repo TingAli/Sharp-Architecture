@@ -16,11 +16,6 @@
         public sealed class UseDatabaseAttribute : Attribute
         {
             /// <summary>
-            ///     Default database identifier.
-            /// </summary>
-            public static readonly string Default = "default";
-
-            /// <summary>
             ///     Session factory key.
             /// </summary>
             public string DatabaseIdentifier { get; }

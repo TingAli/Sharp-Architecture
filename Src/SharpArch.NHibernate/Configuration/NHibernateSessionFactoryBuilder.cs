@@ -1,20 +1,18 @@
-﻿namespace SharpArch.NHibernate
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.IO;
+using System.Reflection;
+using FluentNHibernate.Automapping;
+using FluentNHibernate.Cfg;
+using FluentNHibernate.Cfg.Db;
+using JetBrains.Annotations;
+using NHibernate;
+using SharpArch.Infrastructure.Caching;
+using SharpArch.NHibernate.NHibernateValidator;
+
+namespace SharpArch.NHibernate.Configuration
 {
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-    using System.IO;
-    using System.Reflection;
-    using global::FluentNHibernate.Automapping;
-    using global::FluentNHibernate.Cfg;
-    using global::FluentNHibernate.Cfg.Db;
-    using global::NHibernate;
-    using global::NHibernate.Cfg;
-    using Infrastructure.Caching;
-    using JetBrains.Annotations;
-    using NHibernateValidator;
-
-
     /// <summary>
     ///     Creates NHibernate SessionFactory <see cref="ISessionFactory" />
     /// </summary>
@@ -37,10 +35,10 @@
         string _configFile;
 
         [NotNull] INHibernateConfigurationCache _configurationCache;
-        Action<Configuration> _exposeConfiguration;
+        Action<global::NHibernate.Cfg.Configuration> _exposeConfiguration;
         IPersistenceConfigurer _persistenceConfigurer;
         IDictionary<string, string> _properties;
-        Configuration _cachedConfiguration;
+        global::NHibernate.Cfg.Configuration _cachedConfiguration;
 
         bool _useDataAnnotationValidators;
         Action<CacheSettingsBuilder> _cacheSettingsBuilder;
@@ -88,11 +86,11 @@
         /// <see cref="AddMappingAssemblies"/>, <see cref="UseConfigFile(string)"/> or <see cref="WithFileDependency(string)"/>.
         /// </exception>
         [NotNull]
-        public Configuration BuildConfiguration(string basePath = null)
+        public global::NHibernate.Cfg.Configuration BuildConfiguration(string basePath = null)
         {
             if (_cachedConfiguration != null) return _cachedConfiguration;
 
-            Configuration configuration = null;
+            global::NHibernate.Cfg.Configuration configuration = null;
             DateTime? timestamp = null;
             if (_configurationCache != NullNHibernateConfigurationCache.Null)
             {
@@ -132,7 +130,7 @@
         ///     In case changes must not be persisted in cache, they must be applied after <seealso cref="BuildConfiguration" />.
         /// </remarks>
         [NotNull]
-        public NHibernateSessionFactoryBuilder ExposeConfiguration([NotNull] Action<Configuration> config)
+        public NHibernateSessionFactoryBuilder ExposeConfiguration([NotNull] Action<global::NHibernate.Cfg.Configuration> config)
         {
             _exposeConfiguration = config ?? throw new ArgumentNullException(nameof(config));
             return this;
@@ -293,7 +291,7 @@
             return this;
         }
 
-        Configuration ApplyCustomSettings(Configuration cfg)
+        global::NHibernate.Cfg.Configuration ApplyCustomSettings(global::NHibernate.Cfg.Configuration cfg)
         {
             var fluentConfig = Fluently.Configure(cfg);
             if (_persistenceConfigurer != null)
@@ -328,7 +326,7 @@
             return fluentConfig.BuildConfiguration();
         }
 
-        void AddValidatorsAndExposeConfiguration(Configuration e)
+        void AddValidatorsAndExposeConfiguration(global::NHibernate.Cfg.Configuration e)
         {
             if (_useDataAnnotationValidators)
             {
@@ -347,9 +345,9 @@
         ///     Loads configuration from properties dictionary and from external file if available.
         /// </summary>
         /// <returns></returns>
-        Configuration LoadExternalConfiguration()
+        global::NHibernate.Cfg.Configuration LoadExternalConfiguration()
         {
-            var cfg = new Configuration();
+            var cfg = new global::NHibernate.Cfg.Configuration();
             if (_properties != null && _properties.Count > 0)
             {
                 cfg.AddProperties(_properties);

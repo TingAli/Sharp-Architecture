@@ -1,4 +1,6 @@
-﻿namespace Tests.SharpArch.NHibernate.MultiDb
+﻿using SharpArch.NHibernate.MultiDb;
+
+namespace Tests.SharpArch.NHibernate.MultiDb
 {
     using System;
     using FluentAssertions;

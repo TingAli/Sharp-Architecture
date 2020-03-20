@@ -12,7 +12,7 @@
     /// </summary>
     public class DefaultDatabaseIdentifierProvider : IDatabaseIdentifierProvider
     {
-        static readonly Func<Type, string> _getIdCache = GetFromAttribute;
+        static readonly Func<Type, string> _getIdDelegateCache = GetFromAttribute;
         readonly ConcurrentDictionary<Type, string> _databaseIdCache;
         readonly bool _useMultipleDatabases;
 
@@ -23,7 +23,7 @@
         ///     Value indicating that application is configured to use multiple databases.
         ///     If <c>true</c>, it will perform <see cref="UseDatabaseAttribute" /> lookup;
         ///     setting it <c>false</c> allows to speedup process a little by skipping lookups and always return
-        ///     <see cref="UseDatabaseAttribute.Default" />.
+        ///     <see cref="DatabaseIdentifier.Default" />.
         /// </param>
         public DefaultDatabaseIdentifierProvider(bool useMultipleDatabases)
         {
@@ -37,7 +37,7 @@
         public string GetFromInstance([NotNull] object anObject)
         {
             if (anObject == null) throw new ArgumentNullException(nameof(anObject));
-            if (!_useMultipleDatabases) return UseDatabaseAttribute.Default;
+            if (!_useMultipleDatabases) return DatabaseIdentifier.Default;
 
             var type = anObject.GetType();
             return GetFromType(type);
@@ -47,9 +47,9 @@
         public string GetFromType([NotNull] Type type)
         {
             if (type == null) throw new ArgumentNullException(nameof(type));
-            if (!_useMultipleDatabases) return UseDatabaseAttribute.Default;
+            if (!_useMultipleDatabases) return DatabaseIdentifier.Default;
 
-            var databaseId = _databaseIdCache.GetOrAdd(type, _getIdCache);
+            var databaseId = _databaseIdCache.GetOrAdd(type, _getIdDelegateCache);
             return databaseId;
         }
 
@@ -62,7 +62,7 @@
                 return databaseIdentifierAttribute.DatabaseIdentifier;
             }
 
-            return UseDatabaseAttribute.Default;
+            return DatabaseIdentifier.Default;
         }
     }
 }

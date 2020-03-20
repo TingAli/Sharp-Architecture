@@ -1,4 +1,6 @@
-﻿namespace SharpArch.NHibernate
+﻿using SharpArch.NHibernate.Configuration;
+
+namespace SharpArch.NHibernate
 {
     using System;
     using System.Collections.Generic;
@@ -38,7 +40,7 @@
         ///     </para>
         /// </remarks>
         /// <exception cref="InvalidOperationException">No dependencies were specified</exception>
-        Configuration BuildConfiguration(string basePath = null);
+        global::NHibernate.Cfg.Configuration BuildConfiguration(string basePath = null);
 
         /// <summary>
         ///     Allows to alter configuration before creating NHibernate configuration.
@@ -47,7 +49,7 @@
         ///     Changes to configuration will be persisted in configuration cache, if it is enabled.
         ///     In case changes must not be persisted in cache, they must be applied after <seealso cref="NHibernateSessionFactoryBuilder.BuildConfiguration" />.
         /// </remarks>
-        NHibernateSessionFactoryBuilder ExposeConfiguration([NotNull] Action<Configuration> config);
+        NHibernateSessionFactoryBuilder ExposeConfiguration([NotNull] Action<global::NHibernate.Cfg.Configuration> config);
 
         /// <summary>
         ///     Allows to cache compiled NHibernate configuration.

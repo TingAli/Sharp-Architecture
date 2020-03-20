@@ -1,12 +1,11 @@
-﻿namespace Tests.SharpArch.NHibernate.MultiDb
+﻿using System;
+using System.Collections.Concurrent;
+using JetBrains.Annotations;
+using NHibernate;
+using SharpArch.NHibernate.Impl;
+
+namespace SharpArch.NHibernate.MultiDb
 {
-    using System;
-    using System.Collections.Concurrent;
-    using global::NHibernate;
-    using global::SharpArch.NHibernate;
-    using JetBrains.Annotations;
-
-
     public delegate void ConfigureSession(string databaseIdentifier, ISessionBuilder sessionBuilder);
 
 
@@ -65,12 +64,16 @@
         {
             if (string.IsNullOrWhiteSpace(databaseIdentifier)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(databaseIdentifier));
 
-            return _sessions.GetOrAdd(databaseIdentifier, (key, p) =>
+            if (!_sessions.TryGetValue(databaseIdentifier, out var transactionManager))
             {
-                var builder = p.SessionFactoryRegistry.GetSessionFactory(key).WithOptions();
-                p.ConfigureSession?.Invoke(key, builder);
-                return new TransactionManager(builder.OpenSession());
-            }, _initializationParams);
+                transactionManager = _sessions.GetOrAdd(databaseIdentifier, key =>
+                {
+                    var builder = _initializationParams.SessionFactoryRegistry.GetSessionFactory(key).WithOptions();
+                    _initializationParams.ConfigureSession?.Invoke(key, builder);
+                    return new TransactionManager(builder.OpenSession());
+                });
+            }
+            return transactionManager;
         }
 
         public IStatelessSession CreateStatelessSession([NotNull] string databaseIdentifier)
