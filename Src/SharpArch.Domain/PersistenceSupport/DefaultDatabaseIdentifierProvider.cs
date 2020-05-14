@@ -29,7 +29,7 @@
         {
             _useMultipleDatabases = useMultipleDatabases;
             _databaseIdCache = useMultipleDatabases
-                ? new ConcurrentDictionary<Type, string>(4, 64)
+                ? new ConcurrentDictionary<Type, string>(2, 64)
                 : null;
         }
 

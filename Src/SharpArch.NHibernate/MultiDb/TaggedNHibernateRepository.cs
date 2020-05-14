@@ -1,17 +1,16 @@
-﻿namespace Tests.SharpArch.NHibernate.MultiDb
+﻿namespace SharpArch.NHibernate.MultiDb
 {
     using System;
-    using global::SharpArch.Domain.DomainModel;
-    using global::SharpArch.Domain.PersistenceSupport;
-    using global::SharpArch.NHibernate;
-    using global::SharpArch.NHibernate.Impl;
-    using global::SharpArch.NHibernate.MultiDb;
+    using Domain.DomainModel;
+    using Domain.PersistenceSupport;
+    using Impl;
     using JetBrains.Annotations;
 
 
     /// <summary>
     ///     Prototype.
     /// </summary>
+    [PublicAPI]
     public class TaggedNHibernateRepository<TEntity, TId> : NHibernateRepository<TEntity, TId>
         where TEntity : class, IEntity<TId>
         where TId : IEquatable<TId>
