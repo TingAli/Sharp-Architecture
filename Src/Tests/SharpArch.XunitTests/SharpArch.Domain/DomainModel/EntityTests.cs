@@ -64,7 +64,7 @@ namespace Tests.SharpArch.Domain.DomainModel
         }
 
 
-        public abstract class MockEntityObjectBase<T> : EntityWithTypedId<T>
+        public abstract class MockEntityObjectBase<T> : Entity<T>
             where T : IEquatable<T>
         {
             public string Email { get; set; }
@@ -77,7 +77,7 @@ namespace Tests.SharpArch.Domain.DomainModel
         }
 
 
-        public class ObjectWithOneDomainSignatureProperty : Entity
+        public class ObjectWithOneDomainSignatureProperty : Entity<int>
         {
             [DomainSignature]
             public int Age { get; set; }
@@ -86,7 +86,7 @@ namespace Tests.SharpArch.Domain.DomainModel
         }
 
 
-        class AddressBeingDomainSignatureComparable : Entity
+        class AddressBeingDomainSignatureComparable : Entity<int>
         {
             [DomainSignature]
             public string Address1 { get; set; }
@@ -130,17 +130,17 @@ namespace Tests.SharpArch.Domain.DomainModel
         }
 
 
-        class Entity1 : Entity
+        class Entity1 : Entity<int>
         {
         }
 
 
-        class Entity2 : Entity
+        class Entity2 : Entity<int>
         {
         }
 
 
-        class ObjectWithAllDomainSignatureProperty : Entity
+        class ObjectWithAllDomainSignatureProperty : Entity<int>
         {
             [DomainSignature]
             public int Age { get; set; }
@@ -150,7 +150,7 @@ namespace Tests.SharpArch.Domain.DomainModel
         }
 
 
-        class ObjectWithAssignedId : EntityWithTypedId<string>, IHasAssignedId<string>
+        class ObjectWithAssignedId : Entity<string>, IHasAssignedId<string>
         {
             [DomainSignature]
             public string Name { get; set; }
@@ -162,7 +162,7 @@ namespace Tests.SharpArch.Domain.DomainModel
         }
 
 
-        class ObjectWithComplexProperties : Entity
+        class ObjectWithComplexProperties : Entity<int>
         {
             [DomainSignature]
             public AddressBeingDomainSignatureComparable Address { get; set; }
@@ -175,7 +175,7 @@ namespace Tests.SharpArch.Domain.DomainModel
         }
 
 
-        class ObjectWithIdenticalTypedProperties : Entity
+        class ObjectWithIdenticalTypedProperties : Entity<int>
         {
             [DomainSignature]
             public string Address { get; set; }
@@ -185,7 +185,7 @@ namespace Tests.SharpArch.Domain.DomainModel
         }
 
 
-        class ObjectWithIntId : Entity
+        class ObjectWithIntId : Entity<int>
         {
             [DomainSignature]
             public string Name { get; set; }
@@ -196,7 +196,7 @@ namespace Tests.SharpArch.Domain.DomainModel
         ///     This is a nonsense object; i.e., it doesn't make sense to have
         ///     an entity without a domain signature.
         /// </summary>
-        class ObjectWithNoDomainSignatureProperties : Entity
+        class ObjectWithNoDomainSignatureProperties : Entity<int>
         {
             public int Age { get; set; }
 
@@ -227,7 +227,7 @@ namespace Tests.SharpArch.Domain.DomainModel
         }
 
 
-        class Contact : Entity
+        class Contact : Entity<int>
         {
             public virtual string EmailAddress { get; set; }
         }

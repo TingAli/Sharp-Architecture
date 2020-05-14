@@ -12,12 +12,12 @@ namespace Tests.SharpArch.NHibernate
 
     public class NHibernateRepositoryTests : TransientDatabaseTests<NHibernateTestsSetup>
     {
-        readonly NHibernateRepository<Contractor> _repo;
+        readonly NHibernateRepository<Contractor, int> _repo;
 
         /// <inheritdoc />
         public NHibernateRepositoryTests(NHibernateTestsSetup setup): base(setup)
         {
-            _repo = new NHibernateRepository<Contractor>(TransactionManager);
+            _repo = new NHibernateRepository<Contractor, int>(TransactionManager);
         }
 
         /// <inheritdoc />

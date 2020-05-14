@@ -5,8 +5,8 @@
 
 
     /// <summary>
-    ///     This serves as a base interface for <see cref="EntityWithTypedId{TId}" /> and
-    ///     <see cref="Entity" />. It also provides a simple means to develop your own base entity.
+    ///     This serves as a base interface for <see cref="Entity{TId}" />.
+    /// It also provides a simple means to develop your own base entity.
     /// </summary>
     [PublicAPI]
     public interface IEntityWithTypedId<out TId>

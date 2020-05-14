@@ -1,6 +1,7 @@
 namespace SharpArch.NHibernate.Impl
 {
     using System;
+    using Domain.DomainModel;
     using Domain.PersistenceSupport;
     using global::NHibernate;
     using JetBrains.Annotations;
@@ -19,15 +20,16 @@ namespace SharpArch.NHibernate.Impl
     ///     </para>
     /// </remarks>
     [PublicAPI]
-    public class MultiDbAwareNHibernateRepositoryWithTypedId<TEntity, TId> : NHibernateRepositoryWithTypedIdBase<TEntity, TId>
-        where TEntity : class
+    public class MultiDbAwareNHibernateRepository<TEntity, TId> : NHibernateRepositoryBase<TEntity, TId>
+        where TEntity : class, IEntityWithTypedId<TId>
+        where TId : IEquatable<TId>
     {
         /// <summary>
         ///     Creates instance of the repository.
         /// </summary>
         /// <param name="sessionRegistry"></param>
         /// <param name="databaseIdentifierProvider"></param>
-        public MultiDbAwareNHibernateRepositoryWithTypedId(ISessionRegistry sessionRegistry, IDatabaseIdentifierProvider databaseIdentifierProvider)
+        public MultiDbAwareNHibernateRepository(ISessionRegistry sessionRegistry, IDatabaseIdentifierProvider databaseIdentifierProvider)
             : base(GetTransactionManager(sessionRegistry, databaseIdentifierProvider))
         {
         }

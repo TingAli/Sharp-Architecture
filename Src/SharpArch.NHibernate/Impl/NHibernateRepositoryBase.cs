@@ -11,18 +11,22 @@ using SharpArch.NHibernate.Contracts.Repositories;
 
 namespace SharpArch.NHibernate.Impl
 {
+    using Domain.DomainModel;
+
+
     /// <summary>
     /// Base NHibernate repository implementation.
     /// </summary>
     /// <remarks>
-    /// Keep constructor protected to enable support of single-database (<see cref="NHibernateRepositoryWithTypedId{T,TId}"/>)
+    /// Keep constructor protected to enable support of single-database (<see cref="NHibernateRepository{TEntity,TId}"/>)
     /// and multiple-database
     /// </remarks>
     /// <typeparam name="TEntity">Entity type/</typeparam>
     /// <typeparam name="TId">Entity identifier type.</typeparam>
     [PublicAPI]
-    public class NHibernateRepositoryWithTypedIdBase<TEntity, TId> : IAsyncNHibernateRepositoryWithTypedId<TEntity, TId>
-        where TEntity : class
+    public class NHibernateRepositoryBase<TEntity, TId> : INHibernateRepository<TEntity, TId>
+        where TEntity : class, IEntityWithTypedId<TId>
+        where TId : IEquatable<TId>
     {
         /// <summary>
         ///     Returns NHibernate session.
@@ -37,11 +41,11 @@ namespace SharpArch.NHibernate.Impl
         protected INHibernateTransactionManager TransactionManager { get; }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="NHibernateRepositoryWithTypedIdBase{T, TId}" /> class.
+        ///     Initializes a new instance of the <see cref="NHibernateRepositoryBaseBase{TEntity,TId}" /> class.
         /// </summary>
         /// <param name="transactionManager">The transaction manager.</param>
         /// <exception cref="System.ArgumentNullException"></exception>
-        protected NHibernateRepositoryWithTypedIdBase(
+        protected NHibernateRepositoryBase(
             [NotNull] INHibernateTransactionManager transactionManager)
         {
             TransactionManager = transactionManager ?? throw new ArgumentNullException(nameof(transactionManager));
@@ -87,7 +91,7 @@ namespace SharpArch.NHibernate.Impl
             if (entity != null) await DeleteAsync(entity, cancellationToken).ConfigureAwait(false);
         }
 
-        ITransactionManager IAsyncRepositoryWithTypedId<TEntity, TId>.TransactionManager => TransactionManager;
+        ITransactionManager IRepository<TEntity, TId>.TransactionManager => TransactionManager;
 
         /// <inheritdoc />
         public virtual Task<IList<TEntity>> FindAllAsync(
@@ -161,11 +165,11 @@ namespace SharpArch.NHibernate.Impl
             => Session.LoadAsync<TEntity>(id, ConvertFrom(lockMode), ct);
 
         /// <inheritdoc />
-        public Task<T> MergeAsync(T entity, CancellationToken cancellationToken = default)
+        public Task<TEntity> MergeAsync(TEntity entity, CancellationToken cancellationToken = default)
             => Session.MergeAsync(entity, cancellationToken);
 
         /// <inheritdoc />
-        public virtual async Task<T> UpdateAsync(T entity, CancellationToken ct)
+        public virtual async Task<TEntity> UpdateAsync(TEntity entity, CancellationToken ct)
         {
             await Session.UpdateAsync(entity, ct).ConfigureAwait(false);
             return entity;

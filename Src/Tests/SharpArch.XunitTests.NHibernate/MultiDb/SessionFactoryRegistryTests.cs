@@ -1,11 +1,10 @@
-﻿using SharpArch.NHibernate.MultiDb;
-
-namespace Tests.SharpArch.NHibernate.MultiDb
+﻿namespace Tests.SharpArch.NHibernate.MultiDb
 {
     using System;
     using FluentAssertions;
     using global::NHibernate;
     using global::SharpArch.NHibernate;
+    using global::SharpArch.NHibernate.MultiDb;
     using Moq;
     using Xunit;
 
@@ -17,6 +16,21 @@ namespace Tests.SharpArch.NHibernate.MultiDb
         public SessionFactoryRegistryTests()
         {
             _sessionFactoryRegistry = new SessionFactoryRegistry();
+        }
+
+        [Fact]
+        public void Dispose_Should_Dispose_Initialized_SessionFactory()
+        {
+            var sessionFactory = new Mock<ISessionFactory>();
+            var disposableSessionFactory = sessionFactory.As<IDisposable>();
+            var factoryBuilderMock = new Mock<INHibernateSessionFactoryBuilder>();
+            factoryBuilderMock.Setup(x => x.BuildSessionFactory()).Returns(sessionFactory.Object);
+
+            _sessionFactoryRegistry.Add("1", factoryBuilderMock.Object);
+            _sessionFactoryRegistry.GetSessionFactory("1");
+
+            _sessionFactoryRegistry.Dispose();
+            disposableSessionFactory.Verify(d => d.Dispose());
         }
 
         [Fact]
@@ -35,21 +49,6 @@ namespace Tests.SharpArch.NHibernate.MultiDb
 
             _sessionFactoryRegistry.GetSessionFactory("1").Should().BeEquivalentTo(sessionFactory);
             counter.Should().Be(1, "SessionFactory should be cached");
-        }
-
-        [Fact]
-        public void Dispose_Should_Dispose_Initialized_SessionFactory()
-        {
-            var sessionFactory = new Mock<ISessionFactory>();
-            var disposableSessionFactory = sessionFactory.As<IDisposable>();
-            var factoryBuilderMock = new Mock<INHibernateSessionFactoryBuilder>();
-            factoryBuilderMock.Setup(x => x.BuildSessionFactory()).Returns(sessionFactory.Object);
-
-            _sessionFactoryRegistry.Add("1", factoryBuilderMock.Object);
-            _sessionFactoryRegistry.GetSessionFactory("1");
-
-            _sessionFactoryRegistry.Dispose();
-            disposableSessionFactory.Verify(d => d.Dispose());
         }
     }
 }

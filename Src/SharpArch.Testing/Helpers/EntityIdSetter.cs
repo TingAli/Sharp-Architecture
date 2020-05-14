@@ -6,7 +6,7 @@
     using Domain.DomainModel;
 
     /// <summary>
-    ///     For better data integrity, it is imperative that the <see cref="EntityWithTypedId{TId}.Id" />
+    ///     For better data integrity, it is imperative that the <see cref="Entity{TId}.Id" />
     ///     property is read-only and set only by the ORM.  With that said, some unit tests need
     ///     Id set to a particular value; therefore, this utility enables that ability.  This class should
     ///     never be used outside of the testing project; instead, implement <see cref="IHasAssignedId{IdT}" /> to
@@ -16,7 +16,7 @@
     public static class EntityIdSetter
     {
         /// <summary>
-        ///     Uses reflection to set the Id of a <see cref="EntityWithTypedId{IdT}" />.
+        ///     Uses reflection to set the Id of a <see cref="Entity{TId}" />.
         /// </summary>
         /// <exception cref="ArgumentNullException"><paramref name="entity"/> is <see langword="null" />.</exception>
         /// <exception cref="InvalidOperationException">Property with name 'Id' could not be found.</exception>
@@ -34,7 +34,7 @@
         }
 
         /// <summary>
-        ///     Uses reflection to set the Id of a <see cref="EntityWithTypedId{IdT}" />.
+        ///     Uses reflection to set the Id of a <see cref="Entity{TId}" />.
         /// </summary>
         public static IEntityWithTypedId<TId> SetIdTo<TId>(this IEntityWithTypedId<TId> entity, TId id)
             where TId : IEquatable<TId>
