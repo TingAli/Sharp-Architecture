@@ -20,7 +20,7 @@
         /// </summary>
         /// <exception cref="ArgumentNullException"><paramref name="entity"/> is <see langword="null" />.</exception>
         /// <exception cref="InvalidOperationException">Property with name 'Id' could not be found.</exception>
-        public static void SetIdOf<TId>([NotNull] IEntityWithTypedId<TId> entity, TId id)
+        public static void SetIdOf<TId>([NotNull] IEntity<TId> entity, TId id)
             where TId : IEquatable<TId>
         {
             if (entity == null) throw new ArgumentNullException(nameof(entity));
@@ -36,7 +36,7 @@
         /// <summary>
         ///     Uses reflection to set the Id of a <see cref="Entity{TId}" />.
         /// </summary>
-        public static IEntityWithTypedId<TId> SetIdTo<TId>(this IEntityWithTypedId<TId> entity, TId id)
+        public static IEntity<TId> SetIdTo<TId>(this IEntity<TId> entity, TId id)
             where TId : IEquatable<TId>
         {
             SetIdOf(entity, id);

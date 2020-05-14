@@ -19,7 +19,7 @@ namespace SharpArch.NHibernate.Contracts.Repositories
     /// <seealso cref="IRepository{TEntity,TId}" />
     [PublicAPI]
     public interface INHibernateRepository<TEntity, in TId> : IRepository<TEntity, TId>
-        where TEntity : class, IEntityWithTypedId<TId>
+        where TEntity : class, IEntity<TId>
         where TId : IEquatable<TId>
     {
         /// <summary>

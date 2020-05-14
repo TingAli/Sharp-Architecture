@@ -13,7 +13,7 @@
     ///     Prototype.
     /// </summary>
     public class TaggedNHibernateRepository<TEntity, TId> : NHibernateRepository<TEntity, TId>
-        where TEntity : class, IEntityWithTypedId<TId>
+        where TEntity : class, IEntity<TId>
         where TId : IEquatable<TId>
     {
         public TaggedNHibernateRepository([NotNull] ISessionRegistry sessionRegistry, [NotNull] IDatabaseIdentifierProvider keyProvider)

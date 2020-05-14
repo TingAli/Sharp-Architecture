@@ -21,7 +21,7 @@ namespace SharpArch.NHibernate.Impl
     /// </remarks>
     [PublicAPI]
     public class MultiDbAwareNHibernateRepository<TEntity, TId> : NHibernateRepositoryBase<TEntity, TId>
-        where TEntity : class, IEntityWithTypedId<TId>
+        where TEntity : class, IEntity<TId>
         where TId : IEquatable<TId>
     {
         /// <summary>

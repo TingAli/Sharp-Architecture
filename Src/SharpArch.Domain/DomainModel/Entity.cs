@@ -14,7 +14,8 @@ namespace SharpArch.Domain.DomainModel
     /// </summary>
     [Serializable]
     [PublicAPI]
-    public abstract class Entity<TId> : ValidatableObject, IEntityWithTypedId<TId>, IEntity
+    public abstract class Entity<TId> : ValidatableObject, IEntity<TId>, IEntity,
+        IEquatable<Entity<TId>>
         where TId : IEquatable<TId>
     {
         /// <summary>
@@ -64,6 +65,28 @@ namespace SharpArch.Domain.DomainModel
             return Id.Equals(default(TId));
         }
 
+        /// <inheritdoc />
+        public virtual bool Equals(Entity<TId> other)
+        {
+            if (ReferenceEquals(this, other)) {
+                return true;
+            }
+
+            if (other == null || GetType() != other.GetTypeUnproxied()) {
+                return false;
+            }
+
+            if (HasSameNonDefaultIdAs(other)) {
+                return true;
+            }
+
+            // Since the Ids aren't the same, both of them must be transient to 
+            // compare domain signatures; because if one is transient and the 
+            // other is a persisted entity, then they cannot be the same object.
+            return IsTransient() && other.IsTransient() && HasSameObjectSignatureAs(other);
+            
+        }
+
         /// <summary>
         ///     Determines whether the specified <see cref="System.Object" /> is equal to this instance.
         /// </summary>
@@ -72,23 +95,7 @@ namespace SharpArch.Domain.DomainModel
         public override bool Equals(object obj)
         {
             var compareTo = obj as Entity<TId>;
-
-            if (ReferenceEquals(this, compareTo)) {
-                return true;
-            }
-
-            if (compareTo == null || GetType() != compareTo.GetTypeUnproxied()) {
-                return false;
-            }
-
-            if (HasSameNonDefaultIdAs(compareTo)) {
-                return true;
-            }
-
-            // Since the Ids aren't the same, both of them must be transient to 
-            // compare domain signatures; because if one is transient and the 
-            // other is a persisted entity, then they cannot be the same object.
-            return IsTransient() && compareTo.IsTransient() && HasSameObjectSignatureAs(compareTo);
+            return Equals(compareTo);
         }
 
         /// <summary>

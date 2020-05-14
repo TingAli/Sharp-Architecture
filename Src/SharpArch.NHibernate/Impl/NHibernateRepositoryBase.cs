@@ -25,7 +25,7 @@ namespace SharpArch.NHibernate.Impl
     /// <typeparam name="TId">Entity identifier type.</typeparam>
     [PublicAPI]
     public class NHibernateRepositoryBase<TEntity, TId> : INHibernateRepository<TEntity, TId>
-        where TEntity : class, IEntityWithTypedId<TId>
+        where TEntity : class, IEntity<TId>
         where TId : IEquatable<TId>
     {
         /// <summary>

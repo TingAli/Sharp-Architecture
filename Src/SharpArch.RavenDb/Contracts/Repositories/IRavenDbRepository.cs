@@ -19,7 +19,7 @@ namespace SharpArch.RavenDb.Contracts.Repositories
     /// <seealso cref="IRepository{TEntity,TId}" />
     [PublicAPI]
     public interface IRavenDbRepository<TEntity, in TIdT> : IRepository<TEntity, TIdT>
-        where TEntity : class, IEntityWithTypedId<TIdT>
+        where TEntity : class, IEntity<TIdT>
         where TIdT : IEquatable<TIdT>
     {
         /// <summary>

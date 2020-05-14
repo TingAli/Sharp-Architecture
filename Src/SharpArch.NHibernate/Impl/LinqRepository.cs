@@ -21,7 +21,7 @@ namespace SharpArch.NHibernate.Impl
     /// <seealso cref="ILinqRepository{T,TId}" />
     [PublicAPI]
     public class LinqRepository<TEntity, TId> : NHibernateRepository<TEntity, TId>, ILinqRepository<TEntity, TId>
-        where TEntity : class, IEntityWithTypedId<TId>
+        where TEntity : class, IEntity<TId>
         where TId: IEquatable<TId>
     {
         /// <summary>

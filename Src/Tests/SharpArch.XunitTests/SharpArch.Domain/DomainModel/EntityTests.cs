@@ -599,8 +599,8 @@ namespace Tests.SharpArch.Domain.DomainModel
         [Fact]
         public void Two_persistent_entities_with_different_domain_signature_and_equal_ids_generate_equal_hashcodes()
         {
-            IEntityWithTypedId<int> obj1 = new ObjectWithOneDomainSignatureProperty {Age = 1}.SetIdTo(1);
-            IEntityWithTypedId<int> obj2 = new ObjectWithOneDomainSignatureProperty {Age = 2}.SetIdTo(1);
+            IEntity<int> obj1 = new ObjectWithOneDomainSignatureProperty {Age = 1}.SetIdTo(1);
+            IEntity<int> obj2 = new ObjectWithOneDomainSignatureProperty {Age = 2}.SetIdTo(1);
 
             obj1.GetHashCode().Should().Be(obj2.GetHashCode());
         }
@@ -608,8 +608,8 @@ namespace Tests.SharpArch.Domain.DomainModel
         [Fact]
         public void Two_persistent_entities_with_equal_domain_signature_and_different_ids_generate_different_hashcodes()
         {
-            IEntityWithTypedId<int> obj1 = new ObjectWithOneDomainSignatureProperty {Age = 1}.SetIdTo(1);
-            IEntityWithTypedId<int> obj2 = new ObjectWithOneDomainSignatureProperty {Age = 1}.SetIdTo(2);
+            IEntity<int> obj1 = new ObjectWithOneDomainSignatureProperty {Age = 1}.SetIdTo(1);
+            IEntity<int> obj2 = new ObjectWithOneDomainSignatureProperty {Age = 1}.SetIdTo(2);
 
             obj1.GetHashCode().Should().NotBe(obj2.GetHashCode());
         }
@@ -618,8 +618,8 @@ namespace Tests.SharpArch.Domain.DomainModel
         public void Two_persistent_entities_with_no_signature_properties_and_different_ids_generate_different_hashcodes(
         )
         {
-            IEntityWithTypedId<int> obj1 = new ObjectWithNoDomainSignatureProperties().SetIdTo(1);
-            IEntityWithTypedId<int> obj2 = new ObjectWithNoDomainSignatureProperties().SetIdTo(2);
+            IEntity<int> obj1 = new ObjectWithNoDomainSignatureProperties().SetIdTo(1);
+            IEntity<int> obj2 = new ObjectWithNoDomainSignatureProperties().SetIdTo(2);
 
             obj1.GetHashCode().Should().NotBe(obj2.GetHashCode());
         }
@@ -627,8 +627,8 @@ namespace Tests.SharpArch.Domain.DomainModel
         [Fact]
         public void Two_persistent_entities_with_no_signature_properties_and_equal_ids_generate_equal_hashcodes()
         {
-            IEntityWithTypedId<int> obj1 = new ObjectWithNoDomainSignatureProperties().SetIdTo(1);
-            IEntityWithTypedId<int> obj2 = new ObjectWithNoDomainSignatureProperties().SetIdTo(1);
+            IEntity<int> obj1 = new ObjectWithNoDomainSignatureProperties().SetIdTo(1);
+            IEntity<int> obj2 = new ObjectWithNoDomainSignatureProperties().SetIdTo(1);
 
             obj1.GetHashCode().Should().Be(obj2.GetHashCode());
         }

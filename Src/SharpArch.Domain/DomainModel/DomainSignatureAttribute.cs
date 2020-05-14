@@ -13,7 +13,7 @@ namespace SharpArch.Domain.DomainModel
     [Serializable]
     [AttributeUsage(AttributeTargets.Property)]
     [PublicAPI]
-    [BaseTypeRequired(typeof(IEntityWithTypedId<>))]
+    [BaseTypeRequired(typeof(IEntity<>))]
     public sealed class DomainSignatureAttribute : Attribute
     { }
 }

@@ -22,7 +22,7 @@ namespace SharpArch.Domain.PersistenceSupport
         /// </exception>
         public static async Task SaveAndEvictAsync<TEntity, TId>(
             [NotNull] this IRepository<TEntity, TId> repository, [NotNull] TEntity entity, CancellationToken cancellationToken = default)
-            where TEntity : class, IEntityWithTypedId<TId>
+            where TEntity : class, IEntity<TId>
             where TId : IEquatable<TId>
         {
             if (repository == null) throw new ArgumentNullException(nameof(repository));

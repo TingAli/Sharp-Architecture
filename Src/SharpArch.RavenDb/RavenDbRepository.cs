@@ -27,7 +27,7 @@ namespace SharpArch.RavenDb
     [PublicAPI]
     public class RavenDbRepository<TEntity, TId> : IRavenDbRepository<TEntity, TId>,
         ILinqRepository<TEntity, TId>
-        where TEntity : class, IEntityWithTypedId<TId>
+        where TEntity : class, IEntity<TId>
         where TId : IEquatable<TId>
     {
         /// <summary>

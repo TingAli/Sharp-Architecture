@@ -128,7 +128,7 @@ namespace SharpArch.NHibernate.Impl
                 var propertyName = signatureProperty.Name;
 
                 if (propertyType.GetInterfaces().Any(
-                    x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IEntityWithTypedId<>))) {
+                    x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IEntity<>))) {
                     AppendEntityIdCriteriaTo(criteria, propertyName, propertyValue);
                 }
                 else if (typeof(ValueObject).IsAssignableFrom(propertyType)) {

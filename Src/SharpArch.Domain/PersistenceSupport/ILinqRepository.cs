@@ -18,7 +18,7 @@ namespace SharpArch.Domain.PersistenceSupport
     /// </remarks>
     [PublicAPI]
     public interface ILinqRepository<T, in TId> : IRepository<T, TId>
-        where T : class, IEntityWithTypedId<TId>
+        where T : class, IEntity<TId>
         where TId : IEquatable<TId>
     {
         /// <summary>

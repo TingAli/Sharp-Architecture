@@ -16,7 +16,7 @@
     /// <typeparam name="TId">The type of the entity ID.</typeparam>
     [PublicAPI]
     public interface IRepository<TEntity, in TId>
-        where TEntity : class, IEntityWithTypedId<TId>
+        where TEntity : class, IEntity<TId>
         where TId : IEquatable<TId>
     {
         /// <summary>
