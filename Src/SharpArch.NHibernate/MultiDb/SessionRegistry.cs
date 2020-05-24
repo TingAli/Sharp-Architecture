@@ -6,6 +6,10 @@ using SharpArch.NHibernate.Impl;
 
 namespace SharpArch.NHibernate.MultiDb
 {
+    using System.Collections.Generic;
+    using System.Linq;
+
+
     public delegate void ConfigureSession(string databaseIdentifier, ISessionBuilder sessionBuilder);
 
 
@@ -52,6 +56,16 @@ namespace SharpArch.NHibernate.MultiDb
         }
 
         /// <inheritdoc />
+        public KeyValuePair<string, INHibernateTransactionManager>[] GetOpenSessionsSnapshot()
+        {
+            var openSessions = _sessions.ToArray();
+            // todo: verify if Array.Empty can be omitted.
+            return openSessions.Length == 0
+                ? Array.Empty<KeyValuePair<string, INHibernateTransactionManager>>()
+                : openSessions;
+        }
+
+        /// <inheritdoc />
         public void Dispose()
         {
             foreach (var transactionManager in _sessions.Values)
@@ -60,7 +74,8 @@ namespace SharpArch.NHibernate.MultiDb
             }
         }
 
-        public INHibernateTransactionManager GetTransactionManager([NotNull] string databaseIdentifier)
+        /// <inheritdoc />
+        public INHibernateTransactionManager GetTransactionManager(string databaseIdentifier)
         {
             if (string.IsNullOrWhiteSpace(databaseIdentifier)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(databaseIdentifier));
 
@@ -76,7 +91,8 @@ namespace SharpArch.NHibernate.MultiDb
             return transactionManager;
         }
 
-        public IStatelessSession CreateStatelessSession([NotNull] string databaseIdentifier)
+        /// <inheritdoc />
+        public IStatelessSession CreateStatelessSession(string databaseIdentifier)
         {
             if (string.IsNullOrWhiteSpace(databaseIdentifier)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(databaseIdentifier));
             var builder = _initializationParams.SessionFactoryRegistry.GetSessionFactory(databaseIdentifier).WithStatelessOptions();

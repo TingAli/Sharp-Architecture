@@ -23,8 +23,8 @@
         /// <exception cref="T:System.InvalidOperationException"><see cref="ITransactionManager" /> is not registered in container.</exception>
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            var transactionAttribute = GetTransactionAttribute(context);
             ITransactionManager transactionManager = null;
+            var transactionAttribute = GetTransactionAttribute(context);
             if (transactionAttribute != null)
             {
                 transactionManager = context.HttpContext.RequestServices.GetRequiredService<ITransactionManager>();

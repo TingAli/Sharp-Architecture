@@ -1,6 +1,7 @@
 namespace SharpArch.Web.AspNetCore.Transaction
 {
     using System;
+    using System.Collections.Generic;
     using System.Data;
     using JetBrains.Annotations;
     using Microsoft.AspNetCore.Mvc; 
@@ -47,6 +48,11 @@ namespace SharpArch.Web.AspNetCore.Transaction
         /// <value>Defaults to <c>ReadCommitted</c>.</value>
         public IsolationLevel IsolationLevel { get; }
 
+        /// <inheritdoc />
+        public TransactionAttribute([NotNull] params string[] databaseIdentifiers): this(IsolationLevel.ReadCommitted, true, databaseIdentifiers)
+        {
+        }
+
         /// <summary>
         ///     Constructor.
         /// </summary>
@@ -55,8 +61,21 @@ namespace SharpArch.Web.AspNetCore.Transaction
         ///     indicates that transaction should be rolled back in case of
         ///     model validation error.
         /// </param>
-        public TransactionAttribute(IsolationLevel isolationLevel = IsolationLevel.ReadCommitted, bool rollbackOnModelValidationError = true)
+        public TransactionAttribute(
+            IsolationLevel isolationLevel, bool rollbackOnModelValidationError,
+            [NotNull] params string[] databaseIdentifiers
+            )
         {
+            if (databaseIdentifiers == null) throw new ArgumentNullException(nameof(databaseIdentifiers));
+            if (databaseIdentifiers.Length == 0)
+                throw new ArgumentException("Collection can not be empty.", nameof(databaseIdentifiers));
+
+            var dbIds = new SortedList<string,bool>(databaseIdentifiers.Length);
+            foreach (var databaseIdentifier in databaseIdentifiers)
+            {
+                // todo: check for default
+            }
+
             IsolationLevel = isolationLevel;
             RollbackOnModelValidationError = rollbackOnModelValidationError;
         }
