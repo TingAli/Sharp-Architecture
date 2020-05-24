@@ -17,7 +17,7 @@ namespace Tests.SharpArch.NHibernate
         /// <inheritdoc />
         public NHibernateRepositoryTests(NHibernateTestsSetup setup): base(setup)
         {
-            _repo = new NHibernateRepository<Contractor, int>(TransactionManager);
+            _repo = new NHibernateRepository<Contractor, int>(NHibernateTransactionManager);
         }
 
         /// <inheritdoc />

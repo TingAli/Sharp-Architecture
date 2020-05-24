@@ -56,7 +56,7 @@ namespace SharpArch.NHibernate.MultiDb
         }
 
         /// <inheritdoc />
-        public KeyValuePair<string, INHibernateTransactionManager>[] GetOpenSessionsSnapshot()
+        public KeyValuePair<string, INHibernateTransactionManager>[] GetExistingTransactionsSnapshot()
         {
             var openSessions = _sessions.ToArray();
             // todo: verify if Array.Empty can be omitted.
@@ -83,9 +83,15 @@ namespace SharpArch.NHibernate.MultiDb
             {
                 transactionManager = _sessions.GetOrAdd(databaseIdentifier, key =>
                 {
-                    var builder = _initializationParams.SessionFactoryRegistry.GetSessionFactory(key).WithOptions();
+                    var sessionFactory = _initializationParams.SessionFactoryRegistry.GetSessionFactory(key);
+                    
+                    var builder = sessionFactory.WithOptions();
+                    
                     _initializationParams.ConfigureSession?.Invoke(key, builder);
-                    return new TransactionManager(builder.OpenSession());
+                    var session = builder.OpenSession();
+                    
+                    session.
+                    return new NHibernateTransactionManager(session);
                 });
             }
             return transactionManager;

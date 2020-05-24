@@ -18,9 +18,12 @@
         IStatelessSession CreateStatelessSession([NotNull] string databaseIdentifier);
 
         /// <summary>
-        /// Returns snapshot of all open transactions.
+        ///     Returns snapshot of all open transactions.
         /// </summary>
-        /// <returns></returns>
-        KeyValuePair<string, INHibernateTransactionManager>[] GetOpenSessionsSnapshot();
+        /// <returns>
+        ///     Array of <see cref="KeyValuePair{TKey,TValue}" /> of database identifier and
+        ///     <see cref="INHibernateTransactionManager" />.
+        /// </returns>
+        KeyValuePair<string, INHibernateTransactionManager>[] GetExistingTransactionsSnapshot();
     }
 }

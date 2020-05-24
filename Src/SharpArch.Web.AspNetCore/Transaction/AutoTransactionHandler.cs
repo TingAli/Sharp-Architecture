@@ -12,6 +12,7 @@
     ///     Wraps controller actions marked with <see cref="TransactionAttribute" /> into transaction.
     /// </summary>
     /// <remarks>
+    ///     Must be scoped instance.
     ///     <see cref="ITransactionManager" /> must be registered in IoC in order for this to work.
     /// </remarks>
     [PublicAPI]
@@ -21,38 +22,39 @@
 
         /// <inheritdoc />
         /// <exception cref="T:System.InvalidOperationException"><see cref="ITransactionManager" /> is not registered in container.</exception>
-        public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
+        public Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            ITransactionManager transactionManager = null;
             var transactionAttribute = GetTransactionAttribute(context);
-            if (transactionAttribute != null)
-            {
-                transactionManager = context.HttpContext.RequestServices.GetRequiredService<ITransactionManager>();
-                transactionManager.BeginTransaction(transactionAttribute.IsolationLevel);
-            }
+            return transactionAttribute == null
+                ? next()
+                : WrapInTransaction(context, next, transactionAttribute);
+        }
+
+        static async Task WrapInTransaction(ActionExecutingContext context, ActionExecutionDelegate next, TransactionAttribute transactionAttribute)
+        {
+            ITransactionManager transactionManager;
+            transactionManager = context.HttpContext.RequestServices.GetRequiredService<ISessionRegistry>();
+            transactionManager.BeginTransaction(transactionAttribute.IsolationLevel);
 
             var executedContext = await next().ConfigureAwait(false);
 
-            if (transactionManager != null)
+            if (transactionManager is ISupportsTransactionStatus tranStatus)
             {
-                if (transactionManager is ISupportsTransactionStatus tranStatus)
+                if (!tranStatus.IsActive)
                 {
-                    if (!tranStatus.IsActive)
-                    {
-                        _log.Debug("Transaction is already closed");
-                        return;
-                    }
+                    _log.Debug("Transaction is already closed");
+                    return;
+                }
 
-                    if (executedContext.Exception != null ||
-                        transactionAttribute.RollbackOnModelValidationError && context.ModelState.IsValid == false)
-                    {
-                        // don't use cancellation token to ensure transaction is rolled back on error
-                        await transactionManager.RollbackTransactionAsync().ConfigureAwait(false);
-                    }
-                    else
-                    {
-                        await transactionManager.CommitTransactionAsync(context.HttpContext.RequestAborted).ConfigureAwait(false);
-                    }
+                if (executedContext.Exception != null ||
+                    transactionAttribute.RollbackOnModelValidationError && context.ModelState.IsValid == false)
+                {
+                    // don't use cancellation token to ensure transaction is rolled back on error
+                    await transactionManager.RollbackTransactionAsync().ConfigureAwait(false);
+                }
+                else
+                {
+                    await transactionManager.CommitTransactionAsync(context.HttpContext.RequestAborted).ConfigureAwait(false);
                 }
             }
         }
