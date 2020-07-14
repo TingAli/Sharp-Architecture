@@ -5,7 +5,6 @@ namespace Tests.SharpArch.NHibernate
     using System.Threading.Tasks;
     using Domain;
     using FluentAssertions;
-    using global::SharpArch.NHibernate;
     using global::SharpArch.Testing.Xunit.NHibernate;
     using Xunit;
 
@@ -17,7 +16,7 @@ namespace Tests.SharpArch.NHibernate
         /// <inheritdoc />
         public NHibernateRepositoryTests(NHibernateTestsSetup setup): base(setup)
         {
-            _repo = new NHibernateRepository<Contractor, int>(NHibernateTransactionManager);
+            _repo = NHibernateRepository<Contractor, int>.WithTransactionManager(NHibernateTransactionManager);
         }
 
         /// <inheritdoc />

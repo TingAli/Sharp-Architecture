@@ -11,11 +11,11 @@
 
     public class SessionFactoryRegistryTests
     {
-        readonly SessionFactoryRegistry _sessionFactoryRegistry;
+        readonly NHibernateSessionFactoryRegistry _sessionFactoryRegistry;
 
         public SessionFactoryRegistryTests()
         {
-            _sessionFactoryRegistry = new SessionFactoryRegistry();
+            _sessionFactoryRegistry = new NHibernateSessionFactoryRegistry();
         }
 
         [Fact]
@@ -23,7 +23,7 @@
         {
             var sessionFactory = new Mock<ISessionFactory>();
             var disposableSessionFactory = sessionFactory.As<IDisposable>();
-            var factoryBuilderMock = new Mock<INHibernateSessionFactoryBuilder>();
+            var factoryBuilderMock = new Mock<global::SharpArch.NHibernate.INHibernateSessionFactoryBuilder>();
             factoryBuilderMock.Setup(x => x.BuildSessionFactory()).Returns(sessionFactory.Object);
 
             _sessionFactoryRegistry.Add("1", factoryBuilderMock.Object);
@@ -37,7 +37,7 @@
         public void Should_Defer_Factory_Creation_Until_Get_is_Called()
         {
             int counter = 0;
-            var factoryBuilder = new Mock<INHibernateSessionFactoryBuilder>();
+            var factoryBuilder = new Mock<global::SharpArch.NHibernate.INHibernateSessionFactoryBuilder>();
             factoryBuilder.Setup(x => x.BuildSessionFactory()).Returns(Mock.Of<ISessionFactory>)
                 .Callback(() => counter++);
             _sessionFactoryRegistry.Add("1", factoryBuilder.Object);

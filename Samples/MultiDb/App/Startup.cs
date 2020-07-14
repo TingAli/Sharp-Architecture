@@ -1,18 +1,17 @@
-﻿namespace SharpArch.MultiDatabase
+﻿namespace MultiDatabase.Sample
 {
-    using System.Data;
     using Autofac;
     using Configuration;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Http;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
+    using SharpArch.Web.AspNetCore.Transaction;
 #if NETCOREAPP2_1 || NETCOREAPP2_2
     using System.Globalization;
     using Microsoft.AspNetCore.Mvc;
     using Newtonsoft.Json;
 #endif
-    using Microsoft.Extensions.Configuration;
-    using Microsoft.Extensions.DependencyInjection;
-    using Web.AspNetCore.Transaction;
 
 
     public class Startup

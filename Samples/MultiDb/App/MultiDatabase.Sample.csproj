@@ -28,6 +28,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Src\SharpArch.Domain\SharpArch.Domain.csproj" />
+    <ProjectReference Include="..\..\..\Src\SharpArch.NHibernate.DependencyInjection\SharpArch.NHibernate.Extensions.DependencyInjection.csproj" />
     <ProjectReference Include="..\..\..\Src\SharpArch.NHibernate\SharpArch.NHibernate.csproj" />
     <ProjectReference Include="..\..\..\Src\SharpArch.Web.AspNetCore\SharpArch.Web.AspNetCore.csproj" />
     <ProjectReference Include="..\libs\DomainLayer\DomainLayer.csproj" />

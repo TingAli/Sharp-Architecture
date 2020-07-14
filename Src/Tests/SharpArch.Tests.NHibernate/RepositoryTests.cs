@@ -2,8 +2,6 @@
 // ReSharper disable HeapView.ObjectAllocation
 // ReSharper disable HeapView.ObjectAllocation.Evident
 
-using SharpArch.NHibernate.Impl;
-
 namespace Tests.SharpArch.NHibernate
 {
     using FluentAssertions;
@@ -11,6 +9,8 @@ namespace Tests.SharpArch.NHibernate
     using global::SharpArch.Domain.DomainModel;
     using global::SharpArch.Domain.PersistenceSupport;
     using global::SharpArch.NHibernate;
+    using global::SharpArch.NHibernate.Impl;
+    using global::SharpArch.NHibernate.MultiDb;
     using Moq;
     using NUnit.Framework;
 
@@ -23,16 +23,20 @@ namespace Tests.SharpArch.NHibernate
         public void CanCastConcreteLinqRepositoryToInterfaceILinqRepository()
         {
             var session = new Mock<ISession>();
-            var transactionManager = new Mock<global::SharpArch.NHibernate.INHibernateTransactionManager>();
+            var transactionManager = new Mock<INHibernateTransactionManager>();
             transactionManager.SetupGet(t => t.Session).Returns(session.Object);
-            var concreteRepository = new LinqRepository<MyEntity, int>(transactionManager.Object);
+
+            var sessionRegistry = new Mock<INHibernateSessionRegistry>();
+            sessionRegistry.Setup(x => x.GetNHibernateTransactionManager(DatabaseIdentifier.Default)).Returns(transactionManager.Object);
+
+            var concreteRepository = new LinqRepository<MyEntity, int>(sessionRegistry.Object, DefaultDatabaseIdentifierProvider.Instance);
 
             concreteRepository.Should().BeAssignableTo<ILinqRepository<MyEntity, int>>();
         }
     }
 
 
-    public class MyEntity: Entity<int>
+    public class MyEntity : Entity<int>
     {
         string Name { get; set; }
     }

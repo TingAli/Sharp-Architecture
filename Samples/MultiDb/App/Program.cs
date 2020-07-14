@@ -1,22 +1,20 @@
-﻿namespace SharpArch.MultiDatabase
+﻿namespace MultiDatabase.Sample
 {
-
-#if NETCOREAPP3_1
-    using Microsoft.Extensions.Hosting;
-    using Microsoft.AspNetCore.Hosting;
-#else
-    using Microsoft.AspNetCore.Hosting;
-#endif
-
     using System;
     using System.IO;
     using Autofac.Extensions.DependencyInjection;
+    using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.Hosting;
     using Serilog;
     using Serilog.Events;
     using Serilog.Exceptions;
     using Serilog.Formatting.Json;
     using Serilog.Sinks.SystemConsole.Themes;
+#if NETCOREAPP3_1
+#else
+    using Microsoft.AspNetCore.Hosting;
+#endif
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
     public class Program

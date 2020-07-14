@@ -115,7 +115,7 @@ namespace Suteki.TardisBank.WebApi
                 .Where(t =>
                 {
                     var x = t.IsClosedTypeOf(typeof(IAsyncRepositoryWithTypedId<,>));
-                    _logger.Information("{type}, register: {register}", t, x);
+                    _logger.Information("{Type}, register: {Register}", t, x);
                     return x;
                 })
 #endif

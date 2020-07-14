@@ -10,6 +10,7 @@ namespace SharpArch.NHibernate.Impl
 {
     using System;
     using Domain.DomainModel;
+    using MultiDb;
 
 
     /// <summary>
@@ -27,9 +28,8 @@ namespace SharpArch.NHibernate.Impl
         /// <summary>
         ///     Initializes a new instance of the <see cref="LinqRepository{T,TId}" /> class.
         /// </summary>
-        /// <param name="transactionManager">The transaction manager.</param>
-        public LinqRepository(INHibernateTransactionManager transactionManager)
-            : base(transactionManager)
+        public LinqRepository([NotNull] INHibernateSessionRegistry sessionRegistry, [NotNull] IDatabaseIdentifierProvider databaseIdentifierProvider)
+            : base(sessionRegistry, databaseIdentifierProvider)
         {
         }
 

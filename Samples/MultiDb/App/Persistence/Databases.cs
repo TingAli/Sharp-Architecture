@@ -1,4 +1,4 @@
-﻿namespace SharpArch.MultiDatabase.Persistence
+﻿namespace MultiDatabase.Sample.Persistence
 {
     public static class Databases
     {
